@@ -1,0 +1,38 @@
+.contenedor-inicio{
+    width: 1000px;
+    height: 368px;
+    margin: 10px 10px 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    box-shadow: 0 3px 13px 1px rgb(0 0 0 / 9%);
+}
+
+.imagen-inicio{
+    height: 40%;
+    width: auto;
+}
+
+.contenedor-inicio-texto{
+  text-align: center;
+  padding: 40px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-weight: 400;
+  line-height: 1.5rem;
+}
+
+.info-titulo{
+  font-size: 1.3rem;
+}
+
+.info-subtitulo{
+  font-size: 1.3rem;
+  margin-top: 15px;
+  padding-bottom: 30px;
+}
+
+.info-texto{
+  font-size: 1.1rem;
+  text-align: justify;
+}
