@@ -1,2 +1,7 @@
+<<<<<<< HEAD
 venv
 __pycache__
+=======
+__pycache__
+env
+>>>>>>> b20ce578d422a1f9150241942d91439d162be81e
