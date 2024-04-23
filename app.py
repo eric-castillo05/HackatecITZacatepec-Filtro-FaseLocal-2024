@@ -51,7 +51,7 @@ def predict():
     r.hset(nreg, "dificultad_respirar", data['Dificultad respirar'])
     r.hset(nreg, "dificultad_tragar", data['Dificultad tragar'])
     r.hset(nreg, "dolor_en_pecho", data['Dolor en pecho'])
-    r.hset(nreg, "cancer_pulmon", int(prediction))
+    r.hset(nreg, "cancer_pulmon", int(prediction[0]))
 
     # Retornar la predicción como JSON
     return jsonify({'prediction': prediction.tolist()})

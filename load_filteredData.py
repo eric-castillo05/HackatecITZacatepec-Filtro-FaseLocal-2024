@@ -3,8 +3,6 @@ import redis
 import secrets
 import pandas as pd
 
-def generate_random_key(length=16):
-    return secrets.token_hex(l)
 
 # Conectarse a la BD en redis
 r = redis.Redis(
@@ -15,7 +13,28 @@ r = redis.Redis(
 # Abrir el csv
 df = pd.read_csv('respuestas_filtered.csv')
 print(df.head)
-with open('respuestas_filtered.csv', 'r') as f:
+for row in df.columns:
+    data = {
+            'Sexo': row[0],
+            'Edad': row[1],
+            'Fumador': row[2],
+            'Dedos Amarillos': row[3],
+            'Ansiedad': row[4],
+            'Presion de grupo': row[5],
+            'Enfermedad cronica': row[6],
+            'Fatiga': row[7],
+            'Alergia': row[8],
+            'Sibilancias': row[9],
+            'Consumo Alcohol': row[10],
+            'Tos': row[11],
+            'Dificultad respirar': row[12],
+            'Dificultad tragar': row[13],
+            'Dolor en pecho': row[14],
+            'Cancer de pulmon': row[15]
+        }
+    '''
+
+with open('datasets\respuestas_filtered.csv', 'r') as f:
     # Objeto lector del CSV
     reader = csv.reader(f)
 
@@ -44,7 +63,7 @@ with open('respuestas_filtered.csv', 'r') as f:
         print(row)
 
         # Extraer valores
-        '''Sexo = data.get('Sexo')
+        Sexo = data.get('Sexo')
         Edad = data.get('Edad')
         Fumador = data.get('Fumador')
         Dedos= data.get('Dedos Amarillos')
