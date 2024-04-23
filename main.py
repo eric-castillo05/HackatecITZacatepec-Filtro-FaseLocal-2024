@@ -16,12 +16,10 @@ r = redis.Redis(
   host='redis-10364.c325.us-east-1-4.ec2.cloud.redislabs.com',
   port=10364,
   password='9oxEjbS4slyRNmxknio5Ryi8UaasqLYC')
-TOKEN: Final = '7129178553:AAFDoe-Mx-SdZy47bQwRJkzuOs7rUs-xYRc'
-BOT_USERNAME: Final = '@NetRunnersITZ'
 
-# Estados de la conversación
+# Temas
 SEXO,EDAD,FUMADOR,DEDOS_AMARILLOS,ANSIEDAD, PRESION_GRUPO,ENFERMEDAD_CRONICA,FATIGA,ALERGIA,SIBILANCIAS,CONSUMO_ALCOHOL,TOS,DIFICULTAD_RESPIRAR,\
-DIFICULTAD_TRAGAR,DOLOR_PECHO,CANCER_PULMON = range(16)
+DIFICULTAD_TRAGAR,DOLOR_PECHO,CANCER_PULMON,CANCEL = range(17)
 
 
 # Comandos
@@ -31,22 +29,25 @@ async def start_command(update: Update, context: CallbackContext) -> int:
         [InlineKeyboardButton("No", callback_data='no')]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
-    await update.message.reply_text('¿Estas listo?', reply_markup=reply_markup)
-    if start_command == 'no':
-        return ConversationHandler.END
-    else:
-        return SEXO
+    await update.message.reply_text('¿Estás listo?', reply_markup=reply_markup)
+    return SEXO
 
 async def sexo(update: Update, context: CallbackContext) -> int:
     query = update.callback_query
-    await query.answer()
-    keyboard = [
-        [InlineKeyboardButton("Masculino", callback_data='yes')],
-        [InlineKeyboardButton("Femenino", callback_data='no')]
-    ]
-    reply_markup = InlineKeyboardMarkup(keyboard)
-    await query.edit_message_text(text="¿Cual es tu sexo?", reply_markup=reply_markup)
-    return EDAD
+    answer = query.data  
+    if answer == 'no':
+        await query.answer()
+        await query.edit_message_text("Has cancelado la conversación.")
+        return ConversationHandler.END
+    else:
+        await query.answer()
+        keyboard = [
+            [InlineKeyboardButton("Masculino", callback_data='yes')],
+            [InlineKeyboardButton("Femenino", callback_data='no')]
+        ]
+        reply_markup = InlineKeyboardMarkup(keyboard)
+        await query.edit_message_text(text="¿Cuál es tu sexo?", reply_markup=reply_markup)
+        return EDAD
 
 async def edad(update: Update, context: CallbackContext) -> int:
     query = update.callback_query
@@ -212,16 +213,21 @@ async def dolor_pecho(update: Update, context: CallbackContext) -> int:
     return CANCER_PULMON
 
 async def cancer_pulmon(update: Update, context: CallbackContext) -> int:
-    text = update.message.text
-    text  = update.message.text
-    await update.message.reply_text(f"Lo siento, te vas a morir.")
+    if update.message:
+        text = update.message.text
+        await update.message.reply_text(f"Lo siento, te vas a morir.")
+    else:
+        await update.callback_query.message.reply_text("Lo siento, ocurrió un error.")
+    
     return ConversationHandler.END
-
-
-
-# Función para cancelar la conversación
+   
 async def cancel(update: Update, context: CallbackContext) -> int:
-    await update.message.reply_text('Conversación cancelada.')
+    if update.message:
+        await update.message.reply_text('Conversación cancelada.')
+    elif update.callback_query:
+        await update.callback_query.message.reply_text('Conversación cancelada.')
+    else:
+        pass
     return ConversationHandler.END
 
 if __name__ == '__main__':
@@ -245,7 +251,8 @@ if __name__ == '__main__':
             DIFICULTAD_RESPIRAR: [CallbackQueryHandler(dificultad_respirar)],
             DIFICULTAD_TRAGAR: [CallbackQueryHandler(dificultad_tragar)],
             DOLOR_PECHO: [CallbackQueryHandler(dolor_pecho)],
-            CANCER_PULMON: [MessageHandler(filters.TEXT & ~filters.COMMAND, cancer_pulmon)],
+            CANCER_PULMON: [CallbackQueryHandler(cancer_pulmon)],
+            CANCEL: [CallbackQueryHandler(cancel)],
         },
         fallbacks=[CommandHandler('cancel', cancel)],
     )
