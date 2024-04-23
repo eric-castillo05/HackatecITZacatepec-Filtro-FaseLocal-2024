@@ -1,36 +1,23 @@
 from typing import Final
-<<<<<<< HEAD
-import asyncio
-import aioredis
-=======
->>>>>>> b20ce578d422a1f9150241942d91439d162be81e
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import (
     Application, CommandHandler, CallbackQueryHandler, ConversationHandler, CallbackContext, MessageHandler, filters
 )
-<<<<<<< HEAD
-import distutils
-
 
 
 TOKEN: Final = '7129178553:AAFDoe-Mx-SdZy47bQwRJkzuOs7rUs-xYRc'
 BOT_USERNAME: Final = '@NetRunnersITZ'
-REDIS_HOST = 'redis-10364.c325.us-east-1-4.ec2.cloud.redislabs.com'
-REDIS_PORT = 10364 
-
-
-async def connect_to_redis():
-    redis = await aioredis.from_url(f"redis://{REDIS_HOST}:{REDIS_PORT}", password='9oxEjbS4slyRNmxknio5Ryi8UaasqLYC', encoding="utf-8", decode_responses=True)
-    return redis
 
 # Crea una instancia de la conexión a Redis
-redis_instance = asyncio.run(connect_to_redis())
 
-=======
+import redis
 
+r = redis.Redis(
+  host='redis-10364.c325.us-east-1-4.ec2.cloud.redislabs.com',
+  port=10364,
+  password='9oxEjbS4slyRNmxknio5Ryi8UaasqLYC')
 TOKEN: Final = '7129178553:AAFDoe-Mx-SdZy47bQwRJkzuOs7rUs-xYRc'
 BOT_USERNAME: Final = '@NetRunnersITZ'
->>>>>>> b20ce578d422a1f9150241942d91439d162be81e
 
 # Estados de la conversación
 SEXO,EDAD,FUMADOR,DEDOS_AMARILLOS,ANSIEDAD, PRESION_GRUPO,ENFERMEDAD_CRONICA,FATIGA,ALERGIA,SIBILANCIAS,CONSUMO_ALCOHOL,TOS,DIFICULTAD_RESPIRAR,\
@@ -38,10 +25,6 @@ DIFICULTAD_TRAGAR,DOLOR_PECHO,CANCER_PULMON = range(16)
 
 
 # Comandos
-<<<<<<< HEAD
-=======
-# Esta función inicia la conversación
->>>>>>> b20ce578d422a1f9150241942d91439d162be81e
 async def start_command(update: Update, context: CallbackContext) -> int:
     keyboard = [
         [InlineKeyboardButton("Sí", callback_data='yes')],
@@ -54,7 +37,6 @@ async def start_command(update: Update, context: CallbackContext) -> int:
     else:
         return SEXO
 
-# Funciones para manejar las respuestas de los botones
 async def sexo(update: Update, context: CallbackContext) -> int:
     query = update.callback_query
     await query.answer()
@@ -69,11 +51,6 @@ async def sexo(update: Update, context: CallbackContext) -> int:
 async def edad(update: Update, context: CallbackContext) -> int:
     query = update.callback_query
     await query.answer()
-<<<<<<< HEAD
-=======
-    
-    # Create buttons for ages 20 to 99
->>>>>>> b20ce578d422a1f9150241942d91439d162be81e
     keyboard = []
     age = 20
     while age <= 99:
@@ -235,27 +212,11 @@ async def dolor_pecho(update: Update, context: CallbackContext) -> int:
     return CANCER_PULMON
 
 async def cancer_pulmon(update: Update, context: CallbackContext) -> int:
-<<<<<<< HEAD
     text = update.message.text
-=======
     text  = update.message.text
->>>>>>> b20ce578d422a1f9150241942d91439d162be81e
     await update.message.reply_text(f"Lo siento, te vas a morir.")
     return ConversationHandler.END
 
-
-<<<<<<< HEAD
-async def start_command(update: Update, context: CallbackContext) -> int:
-    # Guarda el ID del chat en Redis
-    await redis_instance.set(f"chat:{update.message.chat.id}:started", "True")
-
-
-
-async def cancel(update: Update, context: CallbackContext) -> int:
-    # Elimina el registro del chat en Redis cuando se cancela la conversación
-    await redis_instance.delete(f"chat:{update.message.chat.id}:started")
-=======
->>>>>>> b20ce578d422a1f9150241942d91439d162be81e
 
 
 # Función para cancelar la conversación
@@ -287,13 +248,6 @@ if __name__ == '__main__':
             CANCER_PULMON: [MessageHandler(filters.TEXT & ~filters.COMMAND, cancer_pulmon)],
         },
         fallbacks=[CommandHandler('cancel', cancel)],
-<<<<<<< HEAD
-        per_message=False, 
-=======
-        per_message=False,  # Explicitly set to False if your logic does not depend on individual messages
->>>>>>> b20ce578d422a1f9150241942d91439d162be81e
-        per_user=True,
-        per_chat=True
     )
 
     app.add_handler(conv_handler)
