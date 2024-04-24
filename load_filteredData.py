@@ -1,19 +1,22 @@
-import csv
-import redis
-import secrets
+from flask import Flask, request, jsonify
+import joblib
 import pandas as pd
+import numpy as np
+import uuid
+import redis
 
 
-# Conectarse a la BD en redis
+#Acceder a la BD
 r = redis.Redis(
   host='redis-10364.c325.us-east-1-4.ec2.cloud.redislabs.com',
   port=10364,
   password='9oxEjbS4slyRNmxknio5Ryi8UaasqLYC')
 
 # Abrir el csv
-df = pd.read_csv('respuestas_filtered.csv')
+df = pd.read_csv('datasets\respuestas_filtered.csv')
 print(df.head)
 for row in df.columns:
+    nreg = str(uuid.uuid4())
     data = {
             'Sexo': row[0],
             'Edad': row[1],
@@ -32,14 +35,9 @@ for row in df.columns:
             'Dolor en pecho': row[14],
             'Cancer de pulmon': row[15]
         }
-    '''
-
-with open('datasets\respuestas_filtered.csv', 'r') as f:
-    # Objeto lector del CSV
-    reader = csv.reader(f)
 
     # Iteramos por columna 
-    for row in reader:
+    for row in df.columns:
         # Convertir los datos a un diccionario 
         data = {
             'Sexo': row[0],
@@ -60,7 +58,6 @@ with open('datasets\respuestas_filtered.csv', 'r') as f:
             'Cancer de pulmon': row[15]
         }
 
-        print(row)
 
         # Extraer valores
         Sexo = data.get('Sexo')
@@ -76,23 +73,21 @@ with open('datasets\respuestas_filtered.csv', 'r') as f:
         Alcohol = data.get('Consumo Alcohol')
         Tos = data.get('Tos')
         Difrespirar = data.get('Dificultad respirar')
-        Diftragar = data-get('Dificultar tragar')
+        Diftragar = data.get('Dificultar tragar')
         DolorPecho = data.get('Dolor en pecho')
         Cancer = data.get('Cancer de pulmon')
 
 
-        random_key = generate_random_key()
-
         # Almacenar valores individuales
-        r.hset('public', row[0] + ':Sexo', Sexo)
-        r.hset('public', row[0] + 'Edad', Edad)
-        r.hset('public', row[0] + ':Fumador', Sexo)
-        r.hset('public', row[0] + 'Dedos amarillos', Dedos)
-        r.hset('public', row[0] + ':Ansiedad', Ansiedad)
-        r.hset('public', row[0] + 'Presion de grupo', Presion)
-        r.hset('public', row[0] + ':Sexo', Sexo)
-        r.hset('public', row[0] + 'Edad', Edad)
-        r.hset('public', row[0] + ':Sexo', Sexo)
-        r.hset('public', row[0] + 'Edad', Edad)'''
+        r.hset(nreg, row[0] + ':Sexo', Sexo)
+        r.hset(nreg, row[0] + 'Edad', Edad)
+        r.hset(nreg, row[0] + ':Fumador', Sexo)
+        r.hset(nreg, row[0] + 'Dedos amarillos', Dedos)
+        r.hset(nreg, row[0] + ':Ansiedad', Ansiedad)
+        r.hset(nreg, row[0] + 'Presion de grupo', Presion)
+        r.hset(nreg, row[0] + ':Sexo', Sexo)
+        r.hset(nreg, row[0] + 'Edad', Edad)
+        r.hset(nreg, row[0] + ':Sexo', Sexo)
+        r.hset(nreg, row[0] + 'Edad', Edad)
 
  
