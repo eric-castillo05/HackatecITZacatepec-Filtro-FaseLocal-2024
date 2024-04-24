@@ -1,9 +1,9 @@
 import React from 'react';
 import '../hojas-de-estilo/Inicio.css'
 
-function Inicion(props){
+function Inicio(props){
     return(
-      <div className = 'contenedor-inicio'>
+      <div className = 'contenedor-inicio p-3'>
         <img className='imagen-inicio' 
         src={require(`../imagenes/pulmon-${props.imagen}.png`)}
         alt='Cancer-de-Pulmon'/>
@@ -18,4 +18,4 @@ function Inicion(props){
     );    
 }
 
-export default Inicion;
+export default Inicio;
