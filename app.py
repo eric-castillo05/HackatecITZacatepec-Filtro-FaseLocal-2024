@@ -8,7 +8,7 @@ import redis
 app = Flask(__name__)
 
 # Cargar el modelo desde el archivo .joblib
-model = joblib.load('model/model.joblib')
+model = joblib.load('models/model.joblib')
 r = redis.Redis(
   host='redis-10364.c325.us-east-1-4.ec2.cloud.redislabs.com',
   port=10364,
@@ -30,9 +30,6 @@ def predict():
     for column in df.columns:
         if column not in columns_to_convert:
             df[column] = df[column].map({1: False, 2: True})
-
-    # Preprocesar los datos adicionales si es necesario
-    # ...
 
     # Generar una predicción usando el modelo cargado
     prediction = model.predict(df)
