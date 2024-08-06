@@ -1,2 +1,7 @@
 env
+<<<<<<< HEAD
 .ipynb_checkpoints
+=======
+.ipynb_checkpoints
+__pycache__
+>>>>>>> models
